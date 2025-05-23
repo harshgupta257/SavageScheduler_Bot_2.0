@@ -35,7 +35,10 @@ pip install -r requirements.txt
 3. Set up your Telegram Bot:
    - Message [@BotFather](https://t.me/botfather) on Telegram
    - Create a new bot and get your API token
-   - Replace `BOT_TOKEN` in `TELEBOT_main.py` with your token
+   - Create a `.env` file in the project root and add your token:
+     ```
+     BOT_TOKEN=your_bot_token_here
+     ```
 
 4. Initialize the database:
 ```bash

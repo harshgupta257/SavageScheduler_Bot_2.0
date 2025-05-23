@@ -5,8 +5,16 @@ from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filte
 from TELEBOT_intent_router import route_intent
 from TELEBOT_roaster import send_roasts  #✅ Import your roast function
 from TELEBOT_reminder import get_due_reminders  # Import reminder system
+import os
+from dotenv import load_dotenv
 
-BOT_TOKEN = "7993486330:AAFKc1ND2k0sVoagvWFn0UfnsHcv593Ypo8"  #🔁 Replace with your actual token
+# Load environment variables
+load_dotenv()
+
+# Get bot token from environment variable
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+if not BOT_TOKEN:
+    raise ValueError("No BOT_TOKEN found in environment variables. Please set it in .env file")
 
 async def periodic_roast_job(app):
     while True:
