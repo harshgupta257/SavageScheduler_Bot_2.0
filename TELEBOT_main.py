@@ -1,7 +1,7 @@
 #TELEBOT_main.py
 import asyncio
 from telegram import Update
-from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
+from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters, CommandHandler
 from TELEBOT_intent_router import route_intent
 from TELEBOT_roaster import send_roasts  #✅ Import your roast function
 from TELEBOT_reminder import get_due_reminders  # Import reminder system
@@ -15,6 +15,45 @@ load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 if not BOT_TOKEN:
     raise ValueError("No BOT_TOKEN found in environment variables. Please set it in .env file")
+
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    welcome_message = (
+        "👋 Welcome to SavageScheduler 2.0!\n\n"
+        "I'm your AI-powered task manager with attitude! 🤖\n\n"
+        "Just talk to me naturally:\n"
+        "• 'Remind me to buy groceries at 5 PM'\n"
+        "• 'Show me all tasks'\n"
+        "• 'Mark task 1 as done'\n"
+        "• 'Delete task 2'\n\n"
+        "Type /help for more examples!"
+    )
+    await update.message.reply_text(welcome_message)
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    help_message = (
+        "🤖 Here's how to talk to me:\n\n"
+        "📝 Adding Tasks:\n"
+        "• 'Remind me to call mom tomorrow at 3'\n"
+        "• 'Add task: team meeting on Friday 2 PM'\n"
+        "• 'Schedule a dentist appointment for next Monday'\n\n"
+        "📋 Viewing Tasks:\n"
+        "• 'Show me all tasks'\n"
+        "• 'What tasks do I have?'\n"
+        "• 'List my pending tasks'\n\n"
+        "✅ Completing Tasks:\n"
+        "• 'Mark task 1 as done'\n"
+        "• 'Complete the meeting task'\n"
+        "• 'Task 2 is finished'\n\n"
+        "🗑️ Deleting Tasks:\n"
+        "• 'Delete task 1'\n"
+        "• 'Remove the meeting task'\n"
+        "• 'Cancel task 2'\n\n"
+        "🔥 Roast System:\n"
+        "• 'mute roasts' - Stop getting roasted\n"
+        "• 'unmute roasts' - Enable roasts again\n\n"
+        "Just talk to me naturally, and I'll understand!"
+    )
+    await update.message.reply_text(help_message)
 
 async def periodic_roast_job(app):
     while True:
@@ -60,7 +99,11 @@ async def post_init(app):
 def main():
     app = ApplicationBuilder().token(BOT_TOKEN).post_init(post_init).build()
 
-    # Register handlers...
+    # Register command handlers
+    app.add_handler(CommandHandler("start", start_command))
+    app.add_handler(CommandHandler("help", help_command))
+    
+    # Register message handler
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     print("🤖 Bot is running with roasting system and reminders enabled!")

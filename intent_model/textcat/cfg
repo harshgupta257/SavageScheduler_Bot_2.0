@@ -1,0 +1,13 @@
+{
+  "labels":[
+    "add_task",
+    "view_tasks",
+    "pending_tasks",
+    "complete_task",
+    "show_completed_tasks",
+    "delete_task",
+    "other"
+  ],
+  "threshold":0.0,
+  "positive_label":null
+}
